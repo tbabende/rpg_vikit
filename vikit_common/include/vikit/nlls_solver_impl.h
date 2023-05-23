@@ -7,8 +7,8 @@
  *      Author: cforster
  */
 
-#ifndef LM_SOLVER_IMPL_HPP_
-#define LM_SOLVER_IMPL_HPP_
+#ifndef LM_SOLVER_IMPL_H_
+#define LM_SOLVER_IMPL_H_
 
 #include <stdexcept>
 
@@ -320,4 +320,4 @@ inline const Eigen::Matrix<double, D, D>& vk::NLLSSolver<D, T>::getInformationMa
   return H_;
 }
 
-#endif /* LM_SOLVER_IMPL_HPP_ */
+#endif /* LM_SOLVER_IMPL_H_ */
