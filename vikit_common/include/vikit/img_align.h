@@ -18,7 +18,7 @@
 #include <vikit/pinhole_camera.h>
 #include <vikit/nlls_solver.h>
 #include <vikit/performance_monitor.h>
-#include <sophus/se3.h>
+#include <sophus/se3.hpp>
 
 namespace vk {
 
@@ -28,7 +28,7 @@ using namespace vk;
 using namespace Sophus;
 
 //! Forward Compositional Image Alignment
-class ForwardCompositionalSE3 : public NLLSSolver<6, SE3> {
+class ForwardCompositionalSE3 : public NLLSSolver<6, Sophus::SE3<double>> {
 
 protected:
   vector<vk::PinholeCamera>& cam_pyr_;
@@ -44,23 +44,19 @@ protected:
   bool                  log_;
   double                res_thresh_;
 
-  virtual double
-  computeResiduals (const SE3& model, bool linearize_system, bool compute_weight_scale = false);
+  virtual double computeResiduals (const Sophus::SE3<double>& model, bool linearize_system, bool compute_weight_scale = false);
 
-  virtual int
-  solve();
+  virtual int solve();
 
-  virtual void
-  update(const ModelType& old_model,  ModelType& new_model);
+  //virtual void update(const SideType& old_model,  SideType& new_model);
+  virtual void  update(const ModelType& old_model,  ModelType& new_model);
 
-  virtual void
-  startIteration();
+  virtual void startIteration();
 
-  virtual void
-  finishIteration();
+  virtual void finishIteration();
 
 public:
-  cv::Mat               resimg_;
+  cv::Mat resimg_;
 
   ForwardCompositionalSE3( vector<PinholeCamera>& cam_pyr,
                            vector<cv::Mat>& depth_pyr,
@@ -68,7 +64,7 @@ public:
                            vector<cv::Mat>& tpl_pyr,
                            vector<cv::Mat>& img_pyr_dx,
                            vector<cv::Mat>& img_pyr_dy,
-                           SE3& init_model,
+                           Sophus::SE3<double>& init_model,
                            int n_levels,
                            int n_iter = 50,
                            float res_thresh = 0.2,
@@ -89,14 +85,13 @@ public:
                            Method method = LevenbergMarquardt,
                            int test_id = 0);
 
-  void
-  runOptimization(SE3& model, int levelBegin = -1, int levelEnd = -1);
+  void runOptimization(Sophus::SE3<double>& model, int levelBegin = -1, int levelEnd = -1);
 
 };
 
 
 //! Efficient Second Order Minimization (ESM)
-class SecondOrderMinimisationSE3 : public NLLSSolver<6, SE3> {
+class SecondOrderMinimisationSE3 : public NLLSSolver<6, Sophus::SE3<double>> {
 
 protected:
   vector<vk::PinholeCamera>& cam_pyr_;
@@ -114,22 +109,18 @@ protected:
   float                 res_thresh_;
 
   virtual double
-  computeResiduals (const SE3& model, bool linearize_system, bool compute_weight_scale = false);
+  computeResiduals (const Sophus::SE3<double>& model, bool linearize_system, bool compute_weight_scale = false);
 
-  virtual int
-  solve();
+  virtual int solve();
 
-  virtual void
-  update(const ModelType& old_model,  ModelType& new_model);
+  virtual void update(const ModelType& old_model,  ModelType& new_model);
 
-  virtual void
-  startIteration();
+  virtual void startIteration();
 
-  virtual void
-  finishIteration();
+  virtual void finishIteration();
 
 public:
-  cv::Mat               resimg_;
+  cv::Mat resimg_;
 
   SecondOrderMinimisationSE3( vector<PinholeCamera>& cam_pyr,
                               vector<cv::Mat>& depth_pyr,
@@ -139,7 +130,7 @@ public:
                               vector<cv::Mat>& img_pyr_dy,
                               vector<cv::Mat>& tpl_pyr_dx,
                               vector<cv::Mat>& tpl_pyr_dy,
-                              SE3& init_model,
+                              Sophus::SE3<double>& init_model,
                               int n_levels,
                               int n_iter = 50,
                               float res_thresh = 0.2,

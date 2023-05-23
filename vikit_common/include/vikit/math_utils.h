@@ -11,7 +11,7 @@
 
 #include <Eigen/Core>
 #include <Eigen/StdVector>
-#include <sophus/se3.h>
+#include <sophus/se3.hpp>
 
 namespace vk
 {
@@ -21,52 +21,52 @@ using namespace std;
 using namespace Sophus;
 
 Vector3d triangulateFeatureNonLin(
-    const Matrix3d& R,
-    const Vector3d& t,
-    const Vector3d& feature1,
-    const Vector3d& feature2);
+    const Sophus::Matrix3d& R,
+    const Sophus::Vector3d& t,
+    const Sophus::Vector3d& feature1,
+    const Sophus::Vector3d& feature2);
 
 /// Assumes the bearing vectors f_c and f_r are on the epipolar plane, i.e.
 /// perfect triangulation without noise!
 bool depthFromTriangulationExact(
-    const Matrix3d& R_r_c,
-    const Vector3d& t_r_c,
-    const Vector3d& f_r,
-    const Vector3d& f_c,
+    const Sophus::Matrix3d& R_r_c,
+    const Sophus::Vector3d& t_r_c,
+    const Sophus::Vector3d& f_r,
+    const Sophus::Vector3d& f_c,
     double& depth_in_r,
     double& depth_in_c);
 
 double reprojError(
-    const Vector3d& f1,
-    const Vector3d& f2,
+    const Sophus::Vector3d& f1,
+    const Sophus::Vector3d& f2,
     double error_multiplier2);
 
 double computeInliers(
-    const vector<Vector3d>& features1,
-    const vector<Vector3d>& features2,
-    const Matrix3d& R,
-    const Vector3d& t,
+    const vector<Sophus::Vector3d>& features1,
+    const vector<Sophus::Vector3d>& features2,
+    const Sophus::Matrix3d& R,
+    const Sophus::Vector3d& t,
     const double reproj_thresh,
     double error_multiplier2,
-    vector<Vector3d>& xyz_vec,
+    vector<Eigen::Vector3d>& xyz_vec,
     vector<int>& inliers,
     vector<int>& outliers);
 
 void computeInliersOneView(
-    const vector<Vector3d> & feature_sphere_vec,
-    const vector<Vector3d> & xyz_vec,
-    const Matrix3d &R,
-    const Vector3d &t,
+    const vector<Sophus::Vector3d> & feature_sphere_vec,
+    const vector<Sophus::Vector3d> & xyz_vec,
+    const Eigen::Matrix3d &R,
+    const Eigen::Vector3d &t,
     const double reproj_thresh,
     const double error_multiplier2,
     vector<int>& inliers,
     vector<int>& outliers);
 
 //! Direct Cosine Matrix to Roll Pitch Yaw
-Vector3d dcm2rpy(const Matrix3d &R);
+Eigen::Vector3d dcm2rpy(const Sophus::Matrix3d &R);
 
 //! Roll Pitch Yaw to Direct Cosine Matrix
-Matrix3d rpy2dcm(const Vector3d &rpy);
+Eigen::Matrix3d rpy2dcm(const Sophus::Vector3d &rpy);
 
 //! Angle Axis parametrization to Quaternion
 Quaterniond angax2quat(const Vector3d& n, const double& angle);
@@ -144,7 +144,7 @@ inline Vector2d pyrFromZero_2d(const Vector2d& uv_0, int level)
 inline void
 frameJac_xyz2uv(const Vector3d & xyz,
                  const double & focal_length,
-                 Matrix<double,2,6> & frame_jac)
+                 Sophus::Matrix<double,2,6> & frame_jac)
 {
   const double x = xyz[0];
   const double y = xyz[1];
