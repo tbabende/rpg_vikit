@@ -24,7 +24,6 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -fsee -fomit-frame-pointer -
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(Eigen REQUIRED)
 FIND_PACKAGE(Sophus REQUIRED)
-set(Sophus_INCLUDE_DIRS "/home/tbabende/oslam3_remode_detectron2_ros/src/orb_slam3_ros/orb_slam3/Thirdparty/Sophus")
 
 # Include dirs
 INCLUDE_DIRECTORIES(
@@ -38,7 +37,7 @@ IF(USE_ROS)
   FIND_PACKAGE(catkin REQUIRED COMPONENTS roscpp cmake_modules)
   LIST(APPEND INCLUDE_DIRECTORIES ${catkin_INCLUDE_DIRS})
   catkin_package(
-    DEPENDS Eigen OpenCV Sophus
+    DEPENDS Eigen OpenCV 
     CATKIN_DEPENDS roscpp
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
